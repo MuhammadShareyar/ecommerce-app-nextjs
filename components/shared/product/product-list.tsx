@@ -11,8 +11,6 @@ const ProductList = ({
 }) => {
   const limitedData = limit ? data.splice(0, limit) : data;
 
-  
-
   return (
     <div className="my-10">
       <h2 className="h2-bold mb-4">{title}</h2>
