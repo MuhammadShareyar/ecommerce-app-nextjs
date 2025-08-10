@@ -1,15 +1,13 @@
 import { Product } from "@/types/Product";
 import ProductCard from "./product-card";
 
-const ProductList = ({
-  data,
-  title,
-  limit,
-}: {
+interface Props {
   data: Product[];
   title?: string;
   limit?: number;
-}) => {
+}
+
+const ProductList = ({ data, title, limit }: Props) => {
   const limitedData = limit ? data.splice(0, limit) : data;
 
   return (

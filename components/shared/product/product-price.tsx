@@ -1,12 +1,11 @@
 import { cn } from "@/lib/utils";
 
-const ProductPrice = ({
-  value,
-  className,
-}: {
+interface Props {
   value: number;
   className?: string;
-}) => {
+}
+
+const ProductPrice = ({ value, className }: Props) => {
   const stringValue = value.toFixed(2);
 
   //   Get the Int/Float

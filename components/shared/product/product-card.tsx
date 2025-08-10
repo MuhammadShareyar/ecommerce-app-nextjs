@@ -4,7 +4,11 @@ import Link from "next/link";
 import ProductPrice from "./product-price";
 import { Product } from "@/types/Product";
 
-const ProductCard = ({ product }: { product: Product }) => {
+interface Props {
+  product: Product;
+}
+
+const ProductCard = ({ product }: Props) => {
   return (
     <Card className="w-full max-w-sm">
       <CardHeader className="p-0 items-center">
