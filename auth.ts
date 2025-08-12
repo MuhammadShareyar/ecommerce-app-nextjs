@@ -89,7 +89,8 @@ export const config = {
       return token;
     },
 
-    authorized({ request, auth }) {
+    authorized({ request, auth }: any) {
+      // Check for cart cookie
       if (!request.cookies.get("sessionCartId")) {
         // Generate cart cookie
         const sessionCartId = crypto.randomUUID();
@@ -104,7 +105,10 @@ export const config = {
           },
         });
 
-        response.cookies.set("sessionCardId", sessionCartId);
+        // Set the newly generated sessionCartId in the response cookies
+        response.cookies.set("sessionCartId", sessionCartId);
+
+        // Return the response with the sessionCartId set
         return response;
       } else {
         return true;
