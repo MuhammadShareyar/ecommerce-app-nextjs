@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { email, z } from "zod";
 import { formatNumberWithDecimal } from "./utils";
 
 export const currency = z
@@ -22,8 +22,23 @@ export const insertProductSchema = z.object({
   price: currency,
 });
 
-// Schema for signin/signup
+// Schema for signin
 export const signInFormSchema = z.object({
   email: z.string().email(),
   password: z.string().min(8, "Password must be atleast 8 characters"),
 });
+
+// Schema for signingup user
+export const signUpFormSchema = z
+  .object({
+    name: z.string().min(3, "Name must be atleast 3 characters"),
+    email: z.string().email(),
+    password: z.string().min(8, "Password must be atleast 8 characters"),
+    confirmPassword: z
+      .string()
+      .min(8, "Confirm password must be atleast 8 characters"),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords does not matched",
+    path: ["confirmPassword"],
+  });
