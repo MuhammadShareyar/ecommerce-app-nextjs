@@ -3,16 +3,14 @@ import { getMyCart } from "@/lib/actions/cart.actions";
 import { getUserById } from "@/lib/actions/user.action";
 import { Metadata } from "next";
 import { redirect } from "next/navigation";
-
-// import ShippingAddressForm from "./shipping-address-form";
 import CheckoutSteps from "@/components/shared/checkout-steps";
-import { ShippingAddress } from "@/types/ShippingAddress";
+import PaymentMethodForm from "./payment-method-form";
 
 export const metadata: Metadata = {
-  title: "Shipping Address",
+  title: "Payment Method",
 };
 
-const ShippingAddressPage = async () => {
+const PaymentMethodPage = async () => {
   const cart = await getMyCart();
 
   if (!cart || cart.items.length === 0) redirect("/cart");
@@ -28,9 +26,9 @@ const ShippingAddressPage = async () => {
   return (
     <>
       <CheckoutSteps current={2} />
-      {/* <ShippingAddressForm address={user.address as ShippingAddress} /> */}
+      <PaymentMethodForm preferredPaymentMethod={user.paymentMethod} />
     </>
   );
 };
 
-export default ShippingAddressPage;
+export default PaymentMethodPage;
