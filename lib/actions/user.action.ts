@@ -1,12 +1,18 @@
 "use server";
 
 import { isRedirectError } from "next/dist/client/components/redirect-error";
-import { shippingAddressSchema, signInFormSchema, signUpFormSchema } from "../validator";
+import {
+  shippingAddressSchema,
+  signInFormSchema,
+  signUpFormSchema,
+} from "../validator";
 import { auth, signIn, signOut } from "@/auth";
 import { hashSync } from "bcrypt-ts-edge";
 import { prisma } from "@/db/prisma";
 import { formatError } from "../utils";
 import { ShippingAddress } from "@/types/ShippingAddress";
+import { cookies } from "next/headers";
+import { getMyCart } from "./cart.actions";
 
 // sigin user
 export async function signInWithCredentials(
@@ -33,6 +39,8 @@ export async function signInWithCredentials(
 
 // signout user
 export async function signOutUser() {
+  const currentCart = await getMyCart();
+  await prisma.cart.delete({ where: { id: currentCart?.id } });
   await signOut();
 }
 
