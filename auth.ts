@@ -3,8 +3,8 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "./db/prisma";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { compareSync } from "bcrypt-ts-edge";
-import type { NextAuthConfig } from "next-auth";
-import { NextResponse } from "next/server";
+import type { NextAuthConfig, Session } from "next-auth";
+import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 
 export const config = {
@@ -112,7 +112,26 @@ export const config = {
       return token;
     },
 
-    authorized({ request, auth }: any) {
+    authorized({ request, auth }: { request: NextRequest, auth:Session|null }) {
+      // Array of regex of protected routes
+      const protectedPaths = [
+        /\/shipping-address/,
+        /\/payment-method/,
+        /\/place-order/,
+        /\/profile/,
+        /\/user\/(.*)/,
+        /\/order\/(.*)/,
+        /\/admin/,
+      ];
+
+      // Get pathname from request
+      const { pathname } = request.nextUrl;
+
+      // check user is unauth and access proctedted rourte
+      if(!auth && protectedPaths.some((p) => p.test(pathname))){
+        return false;
+      }
+
       // Check for cart cookie
       if (!request.cookies.get("sessionCartId")) {
         // Generate cart cookie
