@@ -88,7 +88,7 @@ export async function addItemToCart(data: CartItem) {
         // increase the qty
         (cart.items as CartItem[]).find(
           (cartItem) => cartItem.productId === item.productId
-        )!.qty = item.qty + 1;
+        )!.qty = itemAlreadyAdded.qty + 1;
       } else {
         // check stock
         if (product.stock < 1) {
