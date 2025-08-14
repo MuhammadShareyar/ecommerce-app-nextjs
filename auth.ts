@@ -113,25 +113,7 @@ export const config = {
     },
 
     authorized({ request, auth }: { request: NextRequest, auth:Session|null }) {
-      // Array of regex of protected routes
-      const protectedPaths = [
-        /\/shipping-address/,
-        /\/payment-method/,
-        /\/place-order/,
-        /\/profile/,
-        /\/user\/(.*)/,
-        /\/order\/(.*)/,
-        /\/admin/,
-      ];
-
-      // Get pathname from request
-      const { pathname } = request.nextUrl;
-
-      // check user is unauth and access proctedted rourte
-      if(!auth && protectedPaths.some((p) => p.test(pathname))){
-        return false;
-      }
-
+      
       // Check for cart cookie
       if (!request.cookies.get("sessionCartId")) {
         // Generate cart cookie
