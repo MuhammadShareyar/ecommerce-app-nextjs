@@ -12,7 +12,6 @@ import { hashSync } from "bcrypt-ts-edge";
 import { prisma } from "@/db/prisma";
 import { formatError } from "../utils";
 import { ShippingAddress } from "@/types/ShippingAddress";
-import { cookies } from "next/headers";
 import { getMyCart } from "./cart.actions";
 import z from "zod";
 

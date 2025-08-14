@@ -98,3 +98,15 @@ export async function placeOrder() {
   }
 }
 
+// get order details
+export async function getOrderById(orderId: string) {
+  const orderDetails = await prisma.order.findFirst({
+    where: { id: orderId },
+    include: {
+      orderitems: true,
+      user: { select: { name: true, email: true } },
+    },
+  });
+
+  return convertToPlainObject(orderDetails);
+}
