@@ -13,7 +13,7 @@ async function generateAccessToken() {
     method: "POST",
     body: "grant_type=client_credentials",
     headers: {
-      Authorization: auth,
+      Authorization: `Basic ${auth}`,
       "Content-Type": "application/x-www-form-urlencoded",
     },
   });
@@ -26,3 +26,5 @@ async function generateAccessToken() {
     throw new Error(errorMsg);
   }
 }
+
+export { generateAccessToken };
