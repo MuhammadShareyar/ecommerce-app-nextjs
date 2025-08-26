@@ -23,14 +23,16 @@ export default function UserLayout({
                 height={40}
               />
             </Link>
-            <MainNav className="mx-4"/>
+            <MainNav className="mx-4" />
             <div className="flex items-center ml-auto space-x-4">
               <Menu />
             </div>
           </div>
         </div>
 
-        <div>{children}</div>
+        <div className="flex-1 space-y-4 p-8 pt-6 container mx-auto">
+          {children}
+        </div>
       </div>
     </>
   );
