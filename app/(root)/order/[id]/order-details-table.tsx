@@ -14,8 +14,24 @@ import { formatCurrency, formatDateTime, formatId } from "@/lib/utils";
 import { Order } from "@/types/Order";
 import Image from "next/image";
 import Link from "next/link";
+import { toast } from "sonner";
+import {
+  PayPalButtons,
+  PayPalScriptProvider,
+  usePayPalScriptReducer,
+} from "@paypal/react-paypal-js";
+import {
+  createPaypalOrder,
+  approvePaypalOrder,
+} from "@/lib/actions/order.actions";
 
-const OrderDetailsTable = ({ order }: { order: Order }) => {
+const OrderDetailsTable = ({
+  order,
+  paypalClientId,
+}: {
+  order: Order;
+  paypalClientId: string;
+}) => {
   const {
     shippingAddress,
     orderitems,
@@ -29,6 +45,39 @@ const OrderDetailsTable = ({ order }: { order: Order }) => {
     isDelivered,
     deliveredAt,
   } = order;
+
+  const PrintLoadingState = () => {
+    const [{ isPending, isRejected }] = usePayPalScriptReducer();
+    let status = "";
+
+    if (isPending) {
+      status = "Loading Paypal...";
+    } else if (isRejected) {
+      status = "Error loading Paypal...";
+    }
+
+    return status;
+  };
+
+  const handleCreatePaypalOrder = async () => {
+    const res = await createPaypalOrder(order.id);
+
+    if (!res.success) {
+      toast.error(res.message);
+    }
+
+    return res.data;
+  };
+
+  const handleApprovePaypalOrder = async (data: { orderID: string }) => {
+    const res = await approvePaypalOrder(order.id, data);
+
+    if (!res.success) {
+      toast.error(res.message);
+    } else {
+      toast.success(res.message);
+    }
+  };
 
   return (
     <>
@@ -128,6 +177,14 @@ const OrderDetailsTable = ({ order }: { order: Order }) => {
               </div>
             </CardContent>
           </Card>
+          {/* Paypal Payments */}
+          <PayPalScriptProvider options={{ clientId: paypalClientId || "sb" }}>
+            <PrintLoadingState />
+            <PayPalButtons
+              createOrder={handleCreatePaypalOrder}
+              onApprove={handleApprovePaypalOrder}
+            />
+          </PayPalScriptProvider>
         </div>
       </div>
     </>
