@@ -1,3 +1,4 @@
+import Pagination from "@/components/shared/pagination";
 import { Badge } from "@/components/ui/badge";
 import {
   Table,
@@ -19,8 +20,9 @@ export const metadata: Metadata = {
 const UserOrderPage = async (props: {
   searchParams: Promise<{ page: string }>;
 }) => {
-  const { page } = await props.searchParams;
-  const orders = await getMyOrders({ page: Number(page) || 1 });
+  const params = await props.searchParams;
+  const page = Number(params.page) || 1;
+  const orders = await getMyOrders({ page: page });
   return (
     <div className="space-y-2">
       <h2 className="h2-bold">Orders</h2>
@@ -50,9 +52,11 @@ const UserOrderPage = async (props: {
                   )}
                 </TableCell>
                 <TableCell>
-                  {order.isDelivered && order.deliveredAt
-                    ? formatDateTime(order.deliveredAt).dateTime
-                    : <Badge variant="destructive"> Not Delivered </Badge>}
+                  {order.isDelivered && order.deliveredAt ? (
+                    formatDateTime(order.deliveredAt).dateTime
+                  ) : (
+                    <Badge variant="destructive"> Not Delivered </Badge>
+                  )}
                 </TableCell>
                 <TableCell>
                   <Link href={`/order/${order.id}`}>
@@ -63,6 +67,9 @@ const UserOrderPage = async (props: {
             ))}
           </TableBody>
         </Table>
+        {orders.totalPages > 1 && (
+          <Pagination page={page} totalPages={orders.totalPages} />
+        )}
       </div>
     </div>
   );
