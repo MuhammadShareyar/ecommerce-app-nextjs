@@ -109,11 +109,22 @@ export const config = {
           }
         }
       }
+
+      // handle session update
+      if (session?.user.name && trigger === "update") {
+        token.name = session.user.name;
+      }
+
       return token;
     },
 
-    authorized({ request, auth }: { request: NextRequest, auth:Session|null }) {
-      
+    authorized({
+      request,
+      auth,
+    }: {
+      request: NextRequest;
+      auth: Session | null;
+    }) {
       // Check for cart cookie
       if (!request.cookies.get("sessionCartId")) {
         // Generate cart cookie
