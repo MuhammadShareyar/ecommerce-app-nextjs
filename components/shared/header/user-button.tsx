@@ -57,6 +57,13 @@ const UserButton = async () => {
               User Profile
             </Link>
           </DropdownMenuItem>
+          {session.user.role === "admin" && (
+            <DropdownMenuItem>
+              <Link className="w-full" href="/admin/overview">
+                Admin
+              </Link>
+            </DropdownMenuItem>
+          )}
           <DropdownMenuItem>
             <Link className="w-full" href="/user/orders">
               Order History
