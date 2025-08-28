@@ -6,6 +6,7 @@ import {
   shippingAddressSchema,
   signInFormSchema,
   signUpFormSchema,
+  updateProfileSchema,
 } from "../validator";
 import { auth, signIn, signOut } from "@/auth";
 import { hashSync } from "bcrypt-ts-edge";
@@ -133,6 +134,33 @@ export async function updateUserPaymentMethod(
     await prisma.user.update({
       where: { id: currentUser.id },
       data: { paymentMethod: paymentMethod.type },
+    });
+
+    return {
+      success: true,
+      message: "User updated successfully",
+    };
+  } catch (error) {
+    return { success: false, message: formatError(error) };
+  }
+}
+
+// update user profile
+export async function updateProfile(data: z.infer<typeof updateProfileSchema>) {
+  try {
+    const session = await auth();
+
+    const user = await prisma.user.findFirst({
+      where: { id: session?.user?.id },
+    });
+
+    if (!user) throw new Error("No user found!");
+
+    const profileData = updateProfileSchema.parse(data);
+
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { name: profileData.name },
     });
 
     return {
