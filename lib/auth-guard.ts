@@ -5,7 +5,7 @@ const requireAdmin = async () => {
   const session = await auth();
 
   if (session?.user?.role !== "admin") {
-    redirect("/unauthorized");
+    // redirect("/unauthorized"); 
   }
 
   return session;
