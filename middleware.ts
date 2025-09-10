@@ -31,4 +31,5 @@ export const config = {
     "/order/:path*",
     "/admin/:path*",
   ],
+  runtime:'nodejs'
 };
